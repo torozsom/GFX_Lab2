@@ -15,7 +15,7 @@ You'll draw a spline (a smooth curve defined by control points) by clicking on t
 
 ### OpenGL Basics
 
-**OpenGL** (Open Graphics Library) is a powerful tool for drawing 2D and 3D graphics on your computer. Think of it as a set of instructions that talks to your graphics card (GPU) to render images. Since you're new to graphics, here's a breakdown of key OpenGL concepts used in this project:
+**OpenGL** (Open Graphics Library) is a powerful tool for drawing 2D and 3D graphics on your computer. Think of it as a set of instructions that talks to your graphics card (GPU) to render images.
 
 - **Vertices**: These are points in space (like dots on a graph). In 2D, a vertex has an x and y coordinate. Everything we draw—lines, shapes—is made of vertices.
 
