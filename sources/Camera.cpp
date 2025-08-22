@@ -2,18 +2,19 @@
 
 
 /**
- * @brief Constructs a Camera object with a specified center and size in world space.
+ * @brief Constructs a Camera object with a specified center and size in world
+ * space.
  *
- * This constructor initializes the camera by setting its center position and size
- * in world space coordinates. These parameters define the viewing area of the camera.
+ * This constructor initializes the camera by setting its center position and
+ * size in world space coordinates. These parameters define the viewing area of
+ * the camera.
  *
  * @param center The center position of the camera in world space coordinates.
  * @param size The size of the camera's viewport in world space dimensions.
  * @return A constructed Camera object.
  */
 Camera::Camera(const vec2 center, const vec2 size)
-    : wCenter(center), wSize(size) {
-}
+    : wCenter(center), wSize(size) {}
 
 
 /**
@@ -25,7 +26,9 @@ Camera::Camera(const vec2 center, const vec2 size)
  *
  * @return The view matrix as a 4x4 matrix.
  */
-mat4 Camera::viewMatrix() const { return translate(vec3(-wCenter.x, -wCenter.y, 0)); }
+mat4 Camera::viewMatrix() const {
+    return translate(vec3(-wCenter.x, -wCenter.y, 0));
+}
 
 
 /**
@@ -38,7 +41,9 @@ mat4 Camera::viewMatrix() const { return translate(vec3(-wCenter.x, -wCenter.y, 
  *
  * @return A 4x4 matrix representing the projection transformation.
  */
-mat4 Camera::projectionMatrix() const { return scale(vec3(2.0f / wSize.x, 2.0f / wSize.y, 1)); }
+mat4 Camera::projectionMatrix() const {
+    return scale(vec3(2.0f / wSize.x, 2.0f / wSize.y, 1));
+}
 
 
 /**
@@ -49,9 +54,12 @@ mat4 Camera::projectionMatrix() const { return scale(vec3(2.0f / wSize.x, 2.0f /
  * effectively reverses the view transformation, shifting the world
  * space back into the camera's reference frame.
  *
- * @return A 4x4 matrix that represents the inverse view transformation of the camera.
+ * @return A 4x4 matrix that represents the inverse view transformation of the
+ * camera.
  */
-mat4 Camera::viewMatrixInverse() const { return translate(vec3(wCenter.x, wCenter.y, 0)); }
+mat4 Camera::viewMatrixInverse() const {
+    return translate(vec3(wCenter.x, wCenter.y, 0));
+}
 
 
 /**
@@ -64,7 +72,9 @@ mat4 Camera::viewMatrixInverse() const { return translate(vec3(wCenter.x, wCente
  *
  * @return A 4x4 matrix representing the inverse projection transformation.
  */
-mat4 Camera::projectionMatrixInverse() const { return scale(vec3(wSize.x / 2.0f, wSize.y / 2.0f, 1)); }
+mat4 Camera::projectionMatrixInverse() const {
+    return scale(vec3(wSize.x / 2.0f, wSize.y / 2.0f, 1));
+}
 
 
 /**
@@ -74,9 +84,12 @@ mat4 Camera::projectionMatrixInverse() const { return scale(vec3(wSize.x / 2.0f,
  * of the camera. The VP matrix is used in transforming world coordinates
  * into clip coordinates for rendering.
  *
- * @return A 4x4 matrix representing the combined View-Projection transformation.
+ * @return A 4x4 matrix representing the combined View-Projection
+ * transformation.
  */
-mat4 Camera::viewProjectionMatrix() const { return projectionMatrix() * viewMatrix(); }
+mat4 Camera::viewProjectionMatrix() const {
+    return projectionMatrix() * viewMatrix();
+}
 
 
 /**
@@ -96,9 +109,10 @@ mat4 Camera::viewProjectionMatrix() const { return projectionMatrix() * viewMatr
  * @return A vec2 representing the corresponding position in world space.
  */
 vec2 Camera::pixelToWorld(const vec2 pixelPos, const vec2 windowSize) const {
-    float ndcX = 2.0f * pixelPos.x / windowSize.x - 1.0f;
-    float ndcY = 1.0f - 2.0f * pixelPos.y / windowSize.y;
-    vec4 clipSpace(ndcX, ndcY, 0, 1);
-    vec4 world = projectionMatrixInverse() * viewMatrixInverse() * clipSpace;
+    const float ndcX = 2.0f * pixelPos.x / windowSize.x - 1.0f;
+    const float ndcY = 1.0f - 2.0f * pixelPos.y / windowSize.y;
+    const vec4 clipSpace(ndcX, ndcY, 0, 1);
+    const vec4 world =
+        projectionMatrixInverse() * viewMatrixInverse() * clipSpace;
     return vec2(world.x, world.y);
 }

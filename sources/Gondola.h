@@ -8,7 +8,8 @@ enum GondolaState { Waiting, Started, Fallen };
 
 
 class Gondola {
-    Spline *spline_;
+
+    Spline* spline_;
     float progressAlongSpline_;
     float velocity_;
     float energy_;
@@ -21,8 +22,8 @@ class Gondola {
     Geometry<vec2> body_;
     Geometry<vec2> spokes_;
 
-public:
-    Gondola(Spline *spline);
+  public:
+    explicit Gondola(Spline* spline);
 
     vec2 derivative(float t) const;
 
@@ -32,8 +33,8 @@ public:
 
     void animate(float dt);
 
-    void draw(GPUProgram *shader, const mat4 &MVP);
+    void draw(GPUProgram* shader, const mat4& MVP);
 };
 
 
-#endif //GONDOLA_H
+#endif // GONDOLA_H

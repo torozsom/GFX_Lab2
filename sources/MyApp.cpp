@@ -1,9 +1,9 @@
-#include "Spline.h"
 #include "Camera.h"
 #include "Gondola.h"
+#include "Spline.h"
 
 
-const char *vertexSource = R"(
+const char* vertexSource = R"(
     #version 330
     layout(location = 0) in vec2 cP;
     uniform mat4 MVP;
@@ -13,7 +13,7 @@ const char *vertexSource = R"(
 )";
 
 
-const char *fragmentSource = R"(
+const char* fragmentSource = R"(
     #version 330
     uniform vec3 color;
     out vec4 outColor;
@@ -25,31 +25,33 @@ const char *fragmentSource = R"(
 
 /**
  * @class MyApp
- * @brief Application class for rendering and interacting with a 2D scene including a spline and gondola.
+ * @brief Application class for rendering and interacting with a 2D scene
+ * including a spline and gondola.
  *
- * Inherits from glApp to provide functionality for OpenGL-based rendering, event handling,
- * and animation. This class integrates a camera for world-space interaction, a spline
- * for defining a path, and a gondola for movement along the spline.
+ * Inherits from glApp to provide functionality for OpenGL-based rendering,
+ * event handling, and animation. This class integrates a camera for world-space
+ * interaction, a spline for defining a path, and a gondola for movement along
+ * the spline.
  */
-class MyApp : public glApp {
-    Camera *camera_;
-    Spline *spline_;
-    Gondola *gondola_;
+class MyApp final : public glApp {
+
+    Camera* camera_;
+    Spline* spline_;
+    Gondola* gondola_;
     GPUProgram shader_;
 
-public:
-    MyApp() : glApp(4, 5, 600, 600, "Gondola Spline Simulation") {
-    }
+  public:
+    MyApp() : glApp(4, 5, 600, 600, "Gondola Spline Simulation") {}
 
 
     /**
      * @brief Initializes resources and objects required for the application.
      *
-     * This method overrides the base class onInitialization to set up the camera,
-     * spline, gondola, and shader program. The camera is initialized with a specific
-     * view range, the spline is created as the path for the gondola, and the gondola
-     * is linked to the spline. A GPUProgram is created and initialized with vertex
-     * and fragment shader source code.
+     * This method overrides the base class onInitialization to set up the
+     * camera, spline, gondola, and shader program. The camera is initialized
+     * with a specific view range, the spline is created as the path for the
+     * gondola, and the gondola is linked to the spline. A GPUProgram is created
+     * and initialized with vertex and fragment shader source code.
      */
     void onInitialization() override {
         camera_ = new Camera(vec2(0, 0), vec2(20, 20));
@@ -60,16 +62,18 @@ public:
 
 
     /**
-     * @brief Renders the scene, including the spline and gondola, using the current camera view and projection.
+     * @brief Renders the scene, including the spline and gondola, using the
+     * current camera view and projection.
      *
-     * Clears the screen with a black background and sets up the Model-View-Projection (MVP)
-     * matrix using the camera's viewProjectionMatrix. The spline and gondola are then drawn
-     * using the shader and the computed MVP matrix.
+     * Clears the screen with a black background and sets up the
+     * Model-View-Projection (MVP) matrix using the camera's
+     * viewProjectionMatrix. The spline and gondola are then drawn using the
+     * shader and the computed MVP matrix.
      */
     void onDisplay() override {
         glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT);
-        mat4 MVP = camera_->viewProjectionMatrix();
+        const mat4 MVP = camera_->viewProjectionMatrix();
         spline_->draw(&shader_, MVP);
         gondola_->draw(&shader_, MVP);
     }
@@ -88,9 +92,11 @@ public:
      * @param pX The x-coordinate of the mouse in window coordinates.
      * @param pY The y-coordinate of the mouse in window coordinates.
      */
-    void onMousePressed(const MouseButton button, const int pX, const int pY) override {
+    void onMousePressed(const MouseButton button, const int pX,
+                        const int pY) override {
         if (button == MOUSE_LEFT) {
-            vec2 world = camera_->pixelToWorld(vec2(pX, pY), vec2(600, 600));
+            const vec2 world =
+                camera_->pixelToWorld(vec2(pX, pY), vec2(600, 600));
             spline_->addControlPoint(world);
             refreshScreen();
         }
@@ -98,11 +104,12 @@ public:
 
 
     /**
-     * @brief Handles keyboard input and triggers actions based on the key pressed.
+     * @brief Handles keyboard input and triggers actions based on the key
+     * pressed.
      *
      * Overrides the base class implementation for handling keyboard events.
-     * When the spacebar (' ') key is pressed, this method starts the gondola's movement
-     * and refreshes the display to reflect updates.
+     * When the spacebar (' ') key is pressed, this method starts the gondola's
+     * movement and refreshes the display to reflect updates.
      *
      * @param key The integer representation of the key that is pressed.
      *            For example, 32 represents the spacebar (' ').
@@ -118,16 +125,18 @@ public:
     /**
      * @brief Handles time-based animation and screen updates.
      *
-     * This method is called periodically to advance the gondola's animation along the spline within the specified time interval.
-     * It processes the elapsed time in small increments and ensures the screen is refreshed after updates.
+     * This method is called periodically to advance the gondola's animation
+     * along the spline within the specified time interval. It processes the
+     * elapsed time in small increments and ensures the screen is refreshed
+     * after updates.
      *
      * @param startTime The starting point of the time interval for this update.
      * @param endTime The ending point of the time interval for this update.
      */
     void onTimeElapsed(const float startTime, const float endTime) override {
-        float dt = 0.01f;
+        constexpr float dt = 0.01f;
         for (float t = startTime; t < endTime; t += dt) {
-            float Dt = fmin(dt, endTime - t);
+            const float Dt = fmin(dt, endTime - t);
             gondola_->animate(Dt);
         }
         refreshScreen();
